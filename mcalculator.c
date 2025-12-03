@@ -1,8 +1,8 @@
 // Lacking user input error handeling.
 #include <stdio.h>
 
-void inMatrix(unsigned int r, unsigned int c, int mat[r][c]);
-void outMatrix(unsigned int r, unsigned int c, int mat[r][c]);
+void inMatrix(unsigned int r, unsigned int c, int mat[r][c]); // input a matrix.
+void outMatrix(unsigned int r, unsigned int c, int mat[r][c]); // output (print) a matrix.
 
 // void inv(int imat[][], int omat[][]); // takes two matrix arguments, puts the inverse of the first into the second.
 // void multiply(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the product of the first and the second in the third.
@@ -29,8 +29,9 @@ int main(void)
     printf("Enter First Matrix Dimentions (Like this rows columns): ");
     scanf("%d %d", &in1Rows, &in1Cols);
 
+    // declare first matrix
     int in1mat[in1Rows][in1Cols];
-   
+    // input first matrix   
     inMatrix(in1Rows, in1Cols, in1mat);
 
     
