@@ -26,7 +26,7 @@ int main(void)
     char op;
     
     
-    printf("Enter First Matrix Dimentions (Like this rows columns): ");
+    printf("Enter First Matrix Dimentions (rows columns): ");
     scanf("%d %d", &in1Rows, &in1Cols);
 
     // declare first matrix
