@@ -23,6 +23,10 @@ int main(void)
     int in2Rows;
     int in2Cols;
 
+    // Output Matrix Dimentions
+    int outRows;
+    int outCols;
+    
     // operation    
     char op;
     
@@ -56,7 +60,7 @@ int main(void)
         // perform calculation depending on op.
         // the output matrix dimentions rely on the operation.
         case 't':
-            // int outmat[in1Rows][in1Cols];
+                outRows = in1Cols; outCols = in1Rows;
             break;
 
         case 'i':
@@ -75,6 +79,8 @@ int main(void)
         default:
             printf("Improper operation selected.\n");
     }
+
+    int outMat[outRows][outCols];
 
     
     return 0;
