@@ -4,6 +4,7 @@
 void inMatrix(unsigned int r, unsigned int c, int mat[r][c]); // input a matrix.
 void outMatrix(unsigned int r, unsigned int c, int mat[r][c]); // output (print) a matrix.
 
+// int det(mat[][]); // calculate matrix determinant.
 // void inv(int imat[][], int omat[][]); // takes two matrix arguments, puts the inverse of the first into the second.
 // void multiply(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the product of the first and the second in the third.
 // void devive(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the devision of the first and the second in the third.
