@@ -1,6 +1,6 @@
 // Lacking user input error handeling.
 #include <stdio.h>
-
+//
 void inMatrix(unsigned int r, unsigned int c, int mat[r][c]); // input a matrix.
 void outMatrix(unsigned int r, unsigned int c, int mat[r][c]); // output (print) a matrix.
 
