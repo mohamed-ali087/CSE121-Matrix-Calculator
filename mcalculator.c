@@ -1,72 +1,55 @@
-// Lacking user input error handeling.
 #include <stdio.h>
-//
-void inMatrix(unsigned int r, unsigned int c, int mat[r][c]); // input a matrix.
-void outMatrix(unsigned int r, unsigned int c, int mat[r][c]); // output (print) a matrix.
+#include <math.h>
 
-// int det(mat[][]); // calculate matrix determinant.
-// void inv(int imat[][], int omat[][]); // takes two matrix arguments, puts the inverse of the first into the second.
-// void multiply(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the product of the first and the second in the third.
-// void devive(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the devision of the first and the second in the third.
-// void bitwise_multiply
-// void scalar_multiply
-// void add(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the sum of the first and the second in the third.
-// void sub(int i1mat[][], int i2mat[][], int omat[][]); // substracts
-// void transpose(int imat[][], int omat[][]) // takes 2 matrix arguments, puts the transpose of the first in the second.
+#define MAX_SIZE 10
+
+typedef struct {
+    int rows;
+    int cols;
+    double data[MAX_SIZE][MAX_SIZE]; 
+} Matrix;
+
+void inMatrix(Matrix *m); 
+void outMatrix(Matrix *m); 
+int inverseGaussJordan(Matrix *src, Matrix *inv);
 
 int main(void)
 {
-    // Declaration
+    Matrix in1mat, in2mat, outMat;
     
-    // First array dimentions
-    int in1Rows;
-    int in1Cols;
-
-    // Second array dimentions
-    int in2Rows;
-    int in2Cols;
-
-    // Output Matrix Dimentions
-    int outRows;
-    int outCols;
-    
-    // operation    
     char op;
     
-    
     printf("Enter First Matrix Dimentions (rows columns): ");
-    scanf("%d %d", &in1Rows, &in1Cols);
+    scanf("%d %d", &in1mat.rows, &in1mat.cols);
 
-    // declare first matrix
-    int in1mat[in1Rows][in1Cols];
-    // input first matrix   
-    inMatrix(in1Rows, in1Cols, in1mat);
+    inMatrix(&in1mat);
 
     
-    // take the required calculation from the user
-    printf("Input Operation\n(a -> addition)\n(m -> multiplication)\n(s -> subtraction)\n(i -> inverse)\n(t -> transpose)\n:");
-    scanf("%s", &op);
+    printf("Input Operation\n(a -> addition)\n(m -> multiplication)\n(s -> subtraction)\n(i -> inverse)\n(t -> transpose)\n: ");
+    scanf(" %c", &op); 
     
-    if(op == 'a' | op =='m' | op == 's')
+    if(op == 'a' || op =='m' || op == 's') 
     {
-    // take the second matrix from the user
-
-    printf("Enter second Matrix Dimentions (Like this rows columns): ");
-    scanf("%d %d", &in2Rows, &in2Cols);
-
-    int in2mat[in2Rows][in2Cols];
-   
-    inMatrix( in2Rows, in1Cols, in2mat);
+        printf("Enter second Matrix Dimentions (Like this rows columns): ");
+        scanf("%d %d", &in2mat.rows, &in2mat.cols);
+       
+        inMatrix(&in2mat);
     } 
     
+    int success = 1;
+
     switch (op) {
-        // perform calculation depending on op.
-        // the output matrix dimentions rely on the operation.
         case 't':
-                outRows = in1Cols; outCols = in1Rows;
             break;
 
         case 'i':
+            if (inverseGaussJordan(&in1mat, &outMat)) {
+                printf("\n--- Inverse Matrix ---\n");
+                outMatrix(&outMat);
+            } else {
+                printf("\nError: Singular Matrix or Non-Square Matrix.\n");
+                success = 0;
+            }
             break;
 
         case 'a':
@@ -78,38 +61,91 @@ int main(void)
         case 'm':
             break;
 
-        // give improper usage message if op was not one of the operations.
         default:
             printf("Improper operation selected.\n");
+            success = 0;
     }
 
-    int outMat[outRows][outCols];
-
-    
     return 0;
 }
 
-void inMatrix(unsigned int r, unsigned int c, int mat[r][c])
+void inMatrix(Matrix *m)
 {
-
-    for(int i = 0; i < r ; ++i)
+    printf("Enter elements for %dx%d matrix:\n", m->rows, m->cols);
+    for(int i = 0; i < m->rows ; ++i)
     {
-        for(int j = 0; j < c ; ++j)
+        printf("Row %d: ", i+1); 
+        for(int j = 0; j < m->cols ; ++j)
         {
-            printf("[%d][%d] (You can enter more than one element seperated by spaces): ", i+1, j+1);
-            scanf("%d", &mat[i][j]);
+            scanf("%lf", &m->data[i][j]); 
         }
     }
 }
 
-void outMatrix(unsigned int r, unsigned int c, int mat[r][c])
+void outMatrix(Matrix *m)
 {
-    for(int i = 0; i < r ; ++i)
+    for(int i = 0; i < m->rows ; ++i)
     {
-        for(int j = 0; j < c ; ++j)
+        for(int j = 0; j < m->cols ; ++j)
         {
-            printf("%d  ", mat[i][j]);
+            printf("%.2f\t", m->data[i][j]);
         }
         printf("\n");
     }
+}
+
+
+int inverseGaussJordan(Matrix *src, Matrix *inv) {
+    int n = src->rows;
+    if (n != src->cols) return 0;
+    
+    Matrix temp = *src;
+    inv->rows = n; 
+    inv->cols = n;
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            
+            if (i == j) {
+                inv->data[i][j] = 1.0; 
+            } else {
+                inv->data[i][j] = 0.0;  
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (temp.data[i][i] == 0) {
+            int swapRow = i + 1;
+            while (swapRow < n && temp.data[swapRow][i] == 0) swapRow++;
+            if (swapRow == n) return 0; 
+
+            for (int k = 0; k < n; k++) {
+                double t = temp.data[i][k];
+                temp.data[i][k] = temp.data[swapRow][k]; 
+                temp.data[swapRow][k] = t;
+                t = inv->data[i][k]; 
+                inv->data[i][k] = inv->data[swapRow][k]; 
+                inv->data[swapRow][k] = t;
+            }
+        }
+
+        double pivot = temp.data[i][i]; 
+        for (int j = 0; j < n; j++) {
+            temp.data[i][j] = temp.data[i][j] / pivot;
+            inv->data[i][j]  = inv->data[i][j]  / pivot;
+        }
+
+        for (int k = 0; k < n; k++) {
+            if (k != i) { 
+                double factor = temp.data[k][i]; 
+                
+                for (int j = 0; j < n; j++) {
+                    temp.data[k][j] -= factor * temp.data[i][j];
+                    inv->data[k][j] -= factor * inv->data[i][j];
+                }
+            }
+        }
+    }
+    return 1; 
 }
