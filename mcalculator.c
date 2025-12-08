@@ -149,3 +149,31 @@ int inverseGaussJordan(Matrix *src, Matrix *inv) {
     }
     return 1; 
 }
+void summatrix(int c , int r,int a[r][c], int b[r][c], int result[r][c]) { //sum of two matrix
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            result[i][j] = a[i][j] + b[i][j]; 
+        }
+    }
+}
+void subrtactmatrix(int c , int r,int a[r][c], int b[r][c], int result[r][c]){ 
+    for(int i =0; i<r ; i++){
+        for(int j=0; j<c ; j++){
+            result[i][j]= a[i][j]-b[i][j]; // subtraction of two matrix
+        }
+    }
+}
+void multiplyscalarmatrix (int c , int r , int a[r][c], int result[r][c], int scalar){
+    for(int i =0; i<r ; i++){
+        for(int j=0; j<c ; j++){
+            result[i][j]= a[i][j]*scalar; // multiplication of matrix with scalar 
+        }
+    }
+}
+void bitwise_multiplymatrix(int c , int r , int a[r][c], int b [r][c], int result[r][c]){
+    for( int i=0; i<r ; i++){
+        for (int j=0; j<c; j++){
+            result[i][j]=a[i][j] * b[i][j]; // multplication to each elment in matrix to corresponding elment in the other matrix  
+        }
+    }
+}
