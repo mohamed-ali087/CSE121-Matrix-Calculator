@@ -8,6 +8,8 @@ void outMatrix(unsigned int r, unsigned int c, int mat[r][c]); // output (print)
 // void inv(int imat[][], int omat[][]); // takes two matrix arguments, puts the inverse of the first into the second.
 // void multiply(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the product of the first and the second in the third.
 // void devive(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the devision of the first and the second in the third.
+// void bitwise_multiply
+// void scalar_multiply
 // void add(int i1mat[][], int i2mat[][], int omat[][]); // takes 3 matrix arguments, puts the sum of the first and the second in the third.
 // void sub(int i1mat[][], int i2mat[][], int omat[][]); // substracts
 // void transpose(int imat[][], int omat[][]) // takes 2 matrix arguments, puts the transpose of the first in the second.
