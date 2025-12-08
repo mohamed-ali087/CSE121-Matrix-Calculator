@@ -177,3 +177,21 @@ void bitwise_multiplymatrix(int c , int r , int a[r][c], int b [r][c], int resul
         }
     }
 }
+int transpose(int r, int c, int mat[r][c]){
+    int trans[c][r];
+    for(int i=0;i<r;++i){
+        for(int j=0;j<c;++j){
+            trans[j][i]=mat[i][j];
+        }
+    }
+
+    for(int i=0;i<c;++i)
+    {
+        for(int j=0;j<r;++j)
+        {
+            printf("%d\t",trans[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
