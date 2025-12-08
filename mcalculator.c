@@ -12,7 +12,7 @@ typedef struct {
 void inMatrix(Matrix *m); 
 void outMatrix(Matrix *m); 
 int inverseGaussJordan(Matrix *src, Matrix *inv);
-
+int transpose(int r, int c, int mat[r][c]);
 int main(void)
 {
     Matrix in1mat, in2mat, outMat;
@@ -149,31 +149,21 @@ int inverseGaussJordan(Matrix *src, Matrix *inv) {
     }
     return 1; 
 }
-void summatrix(int c , int r,int a[r][c], int b[r][c], int result[r][c]) { //sum of two matrix
-    for(int i = 0; i < r; i++) {
-        for(int j = 0; j < c; j++) {
-            result[i][j] = a[i][j] + b[i][j]; 
+int transpose(int r, int c, int mat[r][c]){
+    int trans[c][r];
+    for(int i=0;i<r;++i){
+        for(int j=0;j<c;++j){
+            trans[j][i]=mat[i][j];
         }
     }
-}
-void subrtactmatrix(int c , int r,int a[r][c], int b[r][c], int result[r][c]){ 
-    for(int i =0; i<r ; i++){
-        for(int j=0; j<c ; j++){
-            result[i][j]= a[i][j]-b[i][j]; // subtraction of two matrix
+
+    for(int i=0;i<c;++i)
+    {
+        for(int j=0;j<r;++j)
+        {
+            printf("%d\t",trans[i][j]);
         }
+        printf("\n");
     }
-}
-void multiplyscalarmatrix (int c , int r , int a[r][c], int result[r][c], int scalar){
-    for(int i =0; i<r ; i++){
-        for(int j=0; j<c ; j++){
-            result[i][j]= a[i][j]*scalar; // multiplication of matrix with scalar 
-        }
-    }
-}
-void bitwise_multiplymatrix(int c , int r , int a[r][c], int b [r][c], int result[r][c]){
-    for( int i=0; i<r ; i++){
-        for (int j=0; j<c; j++){
-            result[i][j]=a[i][j] * b[i][j]; // multplication to each elment in matrix to corresponding elment in the other matrix  
-        }
-    }
+    return 0;
 }
