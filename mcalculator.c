@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 
 #define MAX_SIZE 10
 
@@ -17,6 +16,7 @@ void subrtactmatrix(Matrix *a, Matrix *b, Matrix *result);
 void multiplyscalarmatrix(Matrix *a, double scalar, Matrix *result);
 void bitwise_multiplymatrix(Matrix *a, Matrix *b, Matrix *result);
 void transpose(Matrix *mat, Matrix *trans);
+float det(Matrix *src);
 
 int main(void)
 {
@@ -24,6 +24,32 @@ int main(void)
     char op;
     double scalar; 
     
+
+    // الشماريخ  
+    // AI Generated من نفسنا
+
+    printf("\033[32m"
+    "          ____\n"
+    "        ,'  , `.               ___                                            ,----..               ,--,                             ,--,                  ___                       \n"
+    "     ,-+-,.' _ |             ,--.'|_             ,--,                        /   /   \\            ,--.'|                           ,--.'|                ,--.'|_                     \n"
+    "  ,-+-. ;   , ||             |  | :,'   __  ,-.,--.'|                       |   :     :           |  | :                      ,--, |  | :                |  | :,'   ,---.    __  ,-. \n"
+    " ,--.'|'   |  ;|             :  : ' : ,' ,'/ /||  |,     ,--,  ,--,         .   |  ;. /           :  : '                    ,'_ /| :  : '                :  : ' :  '   ,'\\ ,' ,'/ /| \n"
+    "|   |  ,', |  ':  ,--.--.  .;__,'  /  '  | |' |`--'_     |'. \\/ .`|         .   ; /--`   ,--.--.  |  ' |      ,---.    .--. |  | : |  ' |     ,--.--.  .;__,'  /  /   /   |'  | |' | \n"
+    "|   | /  | |  || /       \\ |  |   |   |  |   ,',' ,'|    '  \\/  / ;         ;   | ;     /       \\ '  | |     /     \\ ,'_ /| :  . | '  | |    /       \\ |  |   |  .   ; ,. :|  |   ,' \n"
+    "'   | :  | :  |,.--.  .-. |:__,'| :   '  :  /  '  | |     \\  \\. ' /          |   : |    .--.  .-. ||  | :    /    / ' |  ' | |  . . |  | :   .--.  .-. |:__,'| :  '   | |: :'  :  /   \n"
+    ";   . |  ; |--'  \\__\\/: . .  '  : |__ |  | '   |  | :      \\  ;  ;          .   | '___  \\__\\/: . .'  : |__ .    ' /  |  | ' |  | | '  : |__  \\__\\/: . .  '  : |__'   | .; :|  | '    \n"
+    "|   : |  | ,     ,\" .--.; |  |  | '.'|;  : |   '  : |__   / \\  \\  \\         '   ; : .'| ,\" .--.; ||  | '.'|'   ; :__ :  | : ;  ; | |  | '.'| ,\" .--.; |  |  | '.'|   :    |;  : |    \n"
+    "|   : '  |/     /  /  ,.  |  ;  :    ;|  , ;   |  | '.'|./__;   ;  \\        '   | '/  :/  /  ,.  |;  :    ;'   | '.'|'  :  `--'   \\;  :    ;/  /  ,.  |  ;  :    ;\\   \\  / |  , ;    \n"
+    ";   | |`-'     ;  :   .'   \\ |  ,   /  ---'    ;  :    ;|   :/\\  \\ ;        |   :    /;  :   .'   \\  ,   / |   :    ::  ,      .-./|  ,   /;  :   .'   \\ |  ,   /  `----'   ---'     \n"
+    "|   ;/         |  ,     .-./  ---`-'           |  ,   / `---'  `--`          \\   \\ .' |  ,     .-./---`-'   \\   \\  /  `--`----'     ---`-' |  ,     .-./  ---`-'                     \n"
+    "'---'           `--`---'                        ---`-'                        `---`    `--`---'              `----'                         `--`---'                                 \n"
+    "\n"
+    "Made by:\n"
+    "Mohamed Khairy.  Mohamed Ali.  Mohamed Walid.  Kamal Mashhour.\n"
+    "-------------------------------------------------------------------------------\n"
+    "\033[0m");
+    
+
     printf("Enter First Matrix Dimentions (rows columns): ");
     scanf("%d %d", &in1mat.rows, &in1mat.cols);
     inMatrix(&in1mat);
@@ -36,15 +62,18 @@ int main(void)
         printf("Input Operation:\n");
         printf("(a -> addition)\n");
         printf("(s -> subtraction)\n");
-        printf("(m -> bitwise multiplication [element by element])\n"); 
+        printf("(b -> bitwise multiplication [element by element])\n"); 
+        printf("(m -> matrix multiplication \n"); 
         printf("(x -> scalar multiplication [multiply by number])\n");
+        printf("(d -> matrix determinant\n"); 
+        printf("(e -> solve linear equations system\n"); 
         printf("(i -> inverse)\n(t -> transpose)\n(q -> quit)\n: ");
 
         scanf(" %c", &op); 
         
         if (op == 'q') break; 
 
-        if(op == 'a' || op =='m' || op == 's') 
+        if(op == 'a' || op =='m' || op == 's' || op =='b') 
         {
             printf("Enter second Matrix Dimentions (rows columns): ");
             scanf("%d %d", &in2mat.rows, &in2mat.cols);
@@ -53,6 +82,10 @@ int main(void)
         else if (op == 'x') {
             printf("Enter the scalar number: ");
             scanf("%lf", &scalar);
+        }
+        else if (op=='e') {
+            printf("Enter %d*1 Matrix (B Matrix): ", in1mat.rows);
+            inMatrix(&in2mat);
         }
         
         int success = 1;
@@ -74,7 +107,7 @@ int main(void)
                 } else { printf("Error: Dimension Mismatch!\n"); success = 0; }
                 break;
 
-            case 'm': 
+            case 'b': 
                 if(in1mat.rows == in2mat.rows && in1mat.cols == in2mat.cols) {
                     bitwise_multiplymatrix(&in1mat, &in2mat, &outMat);
                     printf("\n--- Bitwise Multiplication Result ---\n");
@@ -93,6 +126,9 @@ int main(void)
                 printf("\n--- Transposed Matrix ---\n");
                 outMatrix(&outMat);
                 break;
+            case 'd':
+                printf("Matrix Determenant = %0.4f", det(&in1mat));
+                break; 
 
             case 'i': 
                 if (inverseGaussJordan(&in1mat, &outMat)) {
@@ -219,5 +255,59 @@ int inverseGaussJordan(Matrix *src, Matrix *inv) {
             }
         }
     }
-    return 1; 
+    return 1;
+}
+
+void swap_rows(Matrix *src, int row1, int row2)
+{
+    double temp;
+    for(int c = 0; c < src->cols; ++c)
+    {
+        temp = src->data[row1][c];
+        src->data[row1][c] = src->data[row2][c];
+        src->data[row2][c] = temp;
+    }
+}
+
+float det(Matrix *src)
+{
+    int dim; 
+    float det = 1;
+
+    if(src->rows != src->cols)
+    {
+        printf("Only Square Matrix Allowed.");
+        return 1;
+    }
+    dim = src->rows;
+
+    for(int c = 0; c < dim; ++c)
+    {
+        int swaps = 0;  
+        if(src->data[c][c] == 0)  
+        {
+            int r = c + 1;
+            while(r < dim && src->data[r][c] == 0)
+                r++;
+
+            if(r == dim)
+                return 0;
+
+            swap_rows(src, c, r);
+        }
+
+        for(int i = c + 1; i < dim; ++i)
+        {
+            double factor = src->data[i][c] / src->data[c][c];
+            for(int j = c; j < dim; ++j)
+            {
+                src->data[i][j] -= factor * src->data[c][j];
+            }
+        }
+    }
+
+    for(int i = 0; i < dim; ++i)
+        det *= src->data[i][i];
+
+    return det;
 }
