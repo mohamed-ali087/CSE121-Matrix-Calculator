@@ -139,15 +139,67 @@ int main(void)
                 }
                 break;
             
-            case 'm': 
-                
-                if(in1mat.cols == in2mat.rows) {
-                    multiplyMatrix(&in1mat, &in2mat, &outMat);
-                    printf("\n--- Standard Multiplication Result ---\n");
+           case 'm':
+                printf("\nSelect Multiplication Type:\n");
+                printf("1. Standard Multiplication (Row x Col)\n");
+                printf("2. Bitwise Multiplication (Element by Element)\n");
+                printf("3. Scalar Multiplication (Matrix x Number)\n: ");
+                scanf(" %c", &sub_op);
+
+                if (sub_op == '1') {
+                    printf("Enter second Matrix Dimentions (rows columns): ");
+                    scanf("%d %d", &in2mat.rows, &in2mat.cols);
+                    if(in1mat.cols == in2mat.rows) {
+                        inMatrix(&in2mat);
+                        multiplyMatrix(&in1mat, &in2mat, &outMat);
+                        printf("\n--- Standard Multiplication Result ---\n");
+                        outMatrix(&outMat);
+                    } else { 
+                        printf("Error: Matrix multiplication not possible (Columns of A must equal Rows of B)\n"); 
+                        success = 0; 
+                    }
+                } else if (sub_op == '2') {
+                    printf("Enter second Matrix Dimentions (rows columns): ");
+                    scanf("%d %d", &in2mat.rows, &in2mat.cols);
+                    if(in1mat.rows == in2mat.rows && in1mat.cols == in2mat.cols) {
+                        inMatrix(&in2mat);
+                        bitwise_multiplymatrix(&in1mat, &in2mat, &outMat);
+                        printf("\n--- Bitwise Multiplication Result ---\n");
+                        outMatrix(&outMat);
+                    } else { 
+                        printf("Error: Dimension Mismatch for Bitwise Multiplication!\n"); 
+                        success = 0; 
+                    }
+                } else if (sub_op == '3') {
+                    printf("Enter the scalar number: ");
+                    scanf("%lf", &scalar);
+                    multiplyscalarmatrix(&in1mat, scalar, &outMat);
+                    printf("\n--- Scalar Multiplication Result ---\n");
                     outMatrix(&outMat);
-                } else { 
-                    printf("Error: Matrix multiplication not possible (Columns of A must equal Rows of B)\n"); 
-                    success = 0; 
+                } else {
+                    printf("Invalid Multiplication Option!\n");
+                    success = 0;
+                }
+                break;
+            
+             case 'l': 
+                if (in1mat.rows != in1mat.cols) {
+                    printf("Error: Coefficient Matrix (A) must be Square (NxN) to solve system.\n");
+                    success = 0;
+                } else {
+                    printf("Enter Constants Vector (B) Dimensions (Must be %d rows, 1 col):\n", in1mat.rows);
+                    printf("The Vector Automatically set to %dx1 for you\n", in1mat.rows);
+                    in2mat.rows = in1mat.rows;
+                    in2mat.cols = 1;
+                    inMatrix(&in2mat);
+
+                    if (solveLinearSystem(&in1mat, &in2mat, &outMat)) {
+                        printf("\n--- Solution Vector (X) ---\n");
+                        outMatrix(&outMat);
+                    } else {
+                        printf("\nError: Singular Matrix (No unique solution).\n");
+                        success = 0;
+                    }
                 }
                 break;
 
@@ -334,4 +386,13 @@ void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result) {
             }
         }
     }
+}
+int solveLinearSystem(Matrix *A, Matrix *B, Matrix *X) {
+    Matrix invA;
+    if (A->rows != A->cols || B->rows != A->rows || B->cols != 1) return 0;
+
+    if (inverseGaussJordan(A, &invA) == 0) return 0;
+    
+    multiplyMatrix(&invA, B, X);
+    return 1; 
 }
