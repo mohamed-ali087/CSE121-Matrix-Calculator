@@ -311,3 +311,27 @@ float det(Matrix *src)
 
     return det;
 }
+void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result) {
+    result->rows = a->rows;
+    result->cols = b->cols;
+
+    for (int i = 0; i < a->rows; i++) {
+        for (int j = 0; j < b->cols; j++) {
+            result->data[i][j] = 0; 
+            for (int k = 0; k < a->cols; k++) {
+                result->data[i][j] += a->data[i][k] * b->data[k][j];
+            }
+        }
+    }
+}
+case 'm': 
+                
+                if(in1mat.cols == in2mat.rows) {
+                    multiplyMatrix(&in1mat, &in2mat, &outMat);
+                    printf("\n--- Standard Multiplication Result ---\n");
+                    outMatrix(&outMat);
+                } else { 
+                    printf("Error: Matrix multiplication not possible (Columns of A must equal Rows of B)\n"); 
+                    success = 0; 
+                }
+                break;
