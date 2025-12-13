@@ -26,8 +26,7 @@ int main(void)
     
 
     // الشماريخ  
-    // AI Generated من نفسنا
-
+    
     printf("\033[32m"
     "          ____\n"
     "        ,'  , `.               ___                                            ,----..               ,--,                             ,--,                  ___                       \n"
@@ -137,6 +136,18 @@ int main(void)
                 } else {
                     printf("\nError: Singular Matrix or Non-Square Matrix.\n");
                     success = 0;
+                }
+                break;
+            
+            case 'm': 
+                
+                if(in1mat.cols == in2mat.rows) {
+                    multiplyMatrix(&in1mat, &in2mat, &outMat);
+                    printf("\n--- Standard Multiplication Result ---\n");
+                    outMatrix(&outMat);
+                } else { 
+                    printf("Error: Matrix multiplication not possible (Columns of A must equal Rows of B)\n"); 
+                    success = 0; 
                 }
                 break;
 
@@ -324,14 +335,3 @@ void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result) {
         }
     }
 }
-case 'm': 
-                
-                if(in1mat.cols == in2mat.rows) {
-                    multiplyMatrix(&in1mat, &in2mat, &outMat);
-                    printf("\n--- Standard Multiplication Result ---\n");
-                    outMatrix(&outMat);
-                } else { 
-                    printf("Error: Matrix multiplication not possible (Columns of A must equal Rows of B)\n"); 
-                    success = 0; 
-                }
-                break;
