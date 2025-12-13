@@ -2,12 +2,14 @@
 
 #define MAX_SIZE 10
 
+// Matrix Structure --- By Mohamed Khairy.
 typedef struct {
     int rows;
     int cols;
     double data[MAX_SIZE][MAX_SIZE]; 
 } Matrix;
 
+// Functions Prototypes
 void inMatrix(Matrix *m); 
 void outMatrix(Matrix *m); 
 int inverseGaussJordan(Matrix *src, Matrix *inv);
@@ -20,6 +22,7 @@ int solveLinearSystem(Matrix *A, Matrix *B, Matrix *X);
 void transpose(Matrix *mat, Matrix *trans);
 float det(Matrix *src);
 
+/* All Team Participated in the main Function (user prompt) so it's messy :D */
 int main(void)
 {
     Matrix in1mat = {0}, in2mat = {0}, outMat = {0};
@@ -41,6 +44,7 @@ int main(void)
     printf("Made by:\n");
     printf("Mohamed Khairy.  Mohamed Ali.  Mohamed Walid.  Kamal Mashhour.\n");
     printf("-------------------------------------------------------------------------------\n");
+    printf("\n");
     printf("\033[0m"); 
     
 
@@ -48,6 +52,7 @@ int main(void)
     scanf("%d %d", &in1mat.rows, &in1mat.cols);
     inMatrix(&in1mat);
 
+    // User prompt
     while(1) {
         printf("\n-------------------------\n");
         printf("Current Matrix:\n");
@@ -67,18 +72,11 @@ int main(void)
         
         if (op == 'q') break; 
 
-        if(op == 'a' || op == 's' || op =='b') 
+
+        if(op == 'a' || op == 's') 
         {
             printf("Enter second Matrix Dimentions (rows columns): ");
             scanf("%d %d", &in2mat.rows, &in2mat.cols);
-            inMatrix(&in2mat);
-        }
-        else if (op == 'x') {
-            printf("Enter the scalar number: ");
-            scanf("%lf", &scalar);
-        }
-        else if (op=='e') {
-            printf("Enter %d*1 Matrix (B Matrix): ", in1mat.rows);
             inMatrix(&in2mat);
         }
         
@@ -101,19 +99,6 @@ int main(void)
                 } else { printf("Error: Dimension Mismatch!\n"); success = 0; }
                 break;
 
-            case 'b': 
-                if(in1mat.rows == in2mat.rows && in1mat.cols == in2mat.cols) {
-                    bitwise_multiplymatrix(&in1mat, &in2mat, &outMat);
-                    printf("\n--- Bitwise Multiplication Result ---\n");
-                    outMatrix(&outMat);
-                } else { printf("Error: Dimension Mismatch!\n"); success = 0; }
-                break;
-
-            case 'x': 
-                multiplyscalarmatrix(&in1mat, scalar, &outMat);
-                printf("\n--- Scalar Multiplication Result ---\n");
-                outMatrix(&outMat);
-                break;
 
             case 't': 
                 transpose(&in1mat, &outMat);
@@ -177,7 +162,7 @@ int main(void)
                 }
                 break;
             
-             case 'l': 
+             case 'e': 
                 if (in1mat.rows != in1mat.cols) {
                     printf("Error: Coefficient Matrix (A) must be Square (NxN) to solve system.\n");
                     success = 0;
@@ -212,6 +197,10 @@ int main(void)
     return 0;
 }
 
+/*
+   By Mohamed Walid.
+    Adding Each element to the corresponding element.
+*/
 void summatrix(Matrix *a, Matrix *b, Matrix *result) { 
     result->rows = a->rows; 
     result->cols = a->cols;
@@ -222,6 +211,10 @@ void summatrix(Matrix *a, Matrix *b, Matrix *result) {
     }
 }
 
+/*
+   By Mohamed Walid.
+    Same as sum but substracting
+*/
 void subrtactmatrix(Matrix *a, Matrix *b, Matrix *result){ 
     result->rows = a->rows; 
     result->cols = a->cols;
@@ -232,6 +225,10 @@ void subrtactmatrix(Matrix *a, Matrix *b, Matrix *result){
     }
 }
 
+/*
+   By Mohamed Walid.
+    Multiply a matrix by a number.
+*/
 void multiplyscalarmatrix (Matrix *a, double scalar, Matrix *result){
     result->rows = a->rows; 
     result->cols = a->cols;
@@ -242,6 +239,10 @@ void multiplyscalarmatrix (Matrix *a, double scalar, Matrix *result){
     }
 }
 
+/*
+   By Mohamed Walid.
+    ElementWise Multiplication.
+*/
 void bitwise_multiplymatrix(Matrix *a, Matrix *b, Matrix *result){
     result->rows = a->rows; 
     result->cols = a->cols;
@@ -252,6 +253,12 @@ void bitwise_multiplymatrix(Matrix *a, Matrix *b, Matrix *result){
     }
 }
 
+/*
+   By Kamal Mashhour.
+    Transpose Function:
+    simply transpose[i][j] = matrix[j][i] using nested For loops.
+
+ */
 void transpose(Matrix *mat, Matrix *trans){
     trans->rows = mat->cols; 
     trans->cols = mat->rows;
@@ -262,6 +269,11 @@ void transpose(Matrix *mat, Matrix *trans){
     }
 }
 
+/*
+   By Mohamed Ali.
+    Entering Matrix Function
+        Nested For loop for scanning all matrix elements.
+*/
 void inMatrix(Matrix *m)
 {
     printf("Enter elements for %dx%d matrix:\n", m->rows, m->cols);
@@ -273,6 +285,11 @@ void inMatrix(Matrix *m)
     }
 }
 
+/*
+    By Mohamed Ali.
+      Printing Matrix Function.
+        Nested For loop for printing all matrix elements.
+*/
 void outMatrix(Matrix *m)
 {
     for(int i = 0; i < m->rows ; ++i){
@@ -283,6 +300,11 @@ void outMatrix(Matrix *m)
     }
 }
 
+/*
+   By Mohamed Khairy.
+    Calculating Matrix Inverse Using Gauss Jordan Method:
+
+*/
 int inverseGaussJordan(Matrix *src, Matrix *inv) {
     int n = src->rows;
     if (n != src->cols) return 0;
@@ -316,6 +338,12 @@ int inverseGaussJordan(Matrix *src, Matrix *inv) {
     return 1;
 }
 
+/*
+   By Mohamed Ali.
+    A Function For Swapping Rows Required by the determinant function.
+        Basic variable swapping for each element.
+    ( This Function is maybe Unnecessary but there is no time to overthink :D )
+*/
 void swap_rows(Matrix *src, int row1, int row2)
 {
     double temp;
@@ -327,9 +355,18 @@ void swap_rows(Matrix *src, int row1, int row2)
     }
 }
 
+/*
+   By Mohamed Ali.
+    Calculating Determinant Using Gauss Elemination Method.
+        in this method we need to transform the matrix into the upper triangle form
+        
+        مش عارف اكتب حاجة الموضوع مجعلص قوي
+        الحاجات دي بتتكتب وتتفهم مرة واحدة بس
+*/
+
 float det(Matrix *src)
 {
-    int dim; 
+    int dim, r; 
     float det = 1;
 
     if(src->rows != src->cols)
@@ -342,13 +379,14 @@ float det(Matrix *src)
     for(int c = 0; c < dim; ++c)
     {
         int swaps = 0;  
+        // This Statement is for avoiding deviving by 0, by swapping rows until there is no 0 in the principle diameter (pivots).
         if(src->data[c][c] == 0)  
         {
-            int r = c + 1;
+            r = c + 1;
             while(r < dim && src->data[r][c] == 0)
                 r++;
 
-            if(r == dim)
+            if(r == dim) // (Avoid infinite loop) if swapped all rows with each other there will be a 0 in the principle diameter which will lead the determinant to equal 0.
                 return 0;
 
             swap_rows(src, c, r);
@@ -369,6 +407,12 @@ float det(Matrix *src)
 
     return det;
 }
+
+/*
+   By Mohamed Walid.
+    Regular Matrix Multiplication.
+    صف في عامود يعني
+*/
 void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result) {
     result->rows = a->rows;
     result->cols = b->cols;
@@ -382,6 +426,14 @@ void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result) {
         }
     }
 }
+
+
+/*
+   By Mohamed Khairy.
+    Solving Linear Systems Function.
+        Using X = B * inv(A) Formula. 
+
+*/
 int solveLinearSystem(Matrix *A, Matrix *B, Matrix *X) {
     Matrix invA;
     if (A->rows != A->cols || B->rows != A->rows || B->cols != 1) return 0;
