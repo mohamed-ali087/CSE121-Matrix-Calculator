@@ -15,6 +15,8 @@ void summatrix(Matrix *a, Matrix *b, Matrix *result);
 void subrtactmatrix(Matrix *a, Matrix *b, Matrix *result);
 void multiplyscalarmatrix(Matrix *a, double scalar, Matrix *result);
 void bitwise_multiplymatrix(Matrix *a, Matrix *b, Matrix *result);
+void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result); 
+int solveLinearSystem(Matrix *A, Matrix *B, Matrix *X);
 void transpose(Matrix *mat, Matrix *trans);
 float det(Matrix *src);
 
