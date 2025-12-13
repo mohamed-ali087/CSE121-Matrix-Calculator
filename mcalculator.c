@@ -25,7 +25,8 @@ int main(void)
     Matrix in1mat, in2mat, outMat;
     char op;
     double scalar; 
-    
+    char sub_op; 
+
 
     // الشماريخ  
     
