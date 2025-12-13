@@ -67,7 +67,7 @@ int main(void)
         
         if (op == 'q') break; 
 
-        if(op == 'a' || op =='m' || op == 's' || op =='b') 
+        if(op == 'a' || op == 's' || op =='b') 
         {
             printf("Enter second Matrix Dimentions (rows columns): ");
             scanf("%d %d", &in2mat.rows, &in2mat.cols);
