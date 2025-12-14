@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #define MAX_SIZE 10
 
@@ -20,7 +21,7 @@ void bitwise_multiplymatrix(Matrix *a, Matrix *b, Matrix *result);
 void multiplyMatrix(Matrix *a, Matrix *b, Matrix *result); 
 int solveLinearSystem(Matrix *A, Matrix *B, Matrix *X);
 void transpose(Matrix *mat, Matrix *trans);
-float det(Matrix *src);
+float det(Matrix mat);
 
 /* All Team Participated in the main Function (user prompt) so it's messy :D */
 int main(void)
@@ -106,7 +107,7 @@ int main(void)
                 outMatrix(&outMat);
                 break;
             case 'd':
-                printf("Matrix Determenant = %0.4f", det(&in1mat));
+                printf("Matrix Determenant = %0.4f", det(in1mat));
                 break; 
 
             case 'i': 
@@ -188,7 +189,7 @@ int main(void)
                 success = 0;
         }
 
-        if (success) {
+        if (success && op!='d') {
             in1mat = outMat;
             printf(">>> Result Saved! You can use it in the next operation. <<<\n");
         }
@@ -353,59 +354,67 @@ void swap_rows(Matrix *src, int row1, int row2)
         src->data[row1][c] = src->data[row2][c];
         src->data[row2][c] = temp;
     }
+
+    /* Note
+        In this function i used passing by reference because i want to modify the given matrix.
+    */
 }
 
 /*
    By Mohamed Ali.
     Calculating Determinant Using Gauss Elemination Method.
-        in this method we need to transform the matrix into the upper triangle form
-        
-        مش عارف اكتب حاجة الموضوع مجعلص قوي
-        الحاجات دي بتتكتب وتتفهم مرة واحدة بس
+        in this method we need to transform the matrix into the upper triangle form.
 */
 
-float det(Matrix *src)
+float det(Matrix mat)
 {
-    int dim, r; 
-    float det = 1;
+                      
+    int dim, s;  // dim is dimension, s is a counter for row swapping
+    float det = 1; // declaring & initializing determinant variable
 
-    if(src->rows != src->cols)
+    if(mat.rows != mat.cols) // handle if the matrix was non square.
     {
         printf("Only Square Matrix Allowed.");
         return 1;
     }
-    dim = src->rows;
+    dim = mat.rows; // Just a shortcut :D.
 
-    for(int c = 0; c < dim; ++c)
+    for(int c = 0; c < dim; ++c)  // main for loop (c represents current row mainly but used depending on context :D (Absolute Confusion :D ...) ), this is responsable for transforming the matrix into the upper triangle form.
     {
-        int swaps = 0;  
-        // This Statement is for avoiding deviving by 0, by swapping rows until there is no 0 in the principle diameter (pivots).
-        if(src->data[c][c] == 0)  
+        // This Statement is for avoiding deviving by 0, by swapping rows until there is no 0 in the principle diameter.
+        if(mat.data[c][c] == 0)  
         {
-            r = c + 1;
-            while(r < dim && src->data[r][c] == 0)
-                r++;
+            s = c + 1;
+            while(s < dim && mat.data[s][c] == 0) // طول ما s أقل من عدد الصفوف (معديش آخر صف ) والصف اللي هبدل بيه مش هيديني صفر في القطر الرئيسي هفضل انزل
+                s++;
 
-            if(r == dim) // (Avoid infinite loop) if swapped all rows with each other there will be a 0 in the principle diameter which will lead the determinant to equal 0.
+            if(s == dim) // (Avoid infinite loop) if swapped all rows with each other there will be a 0 in the principle diameter which will lead the determinant to equal 0.
                 return 0;
 
-            swap_rows(src, c, r);
+            swap_rows(&mat, c, s); // swap rows.
         }
 
-        for(int i = c + 1; i < dim; ++i)
+        // making the upper triangle form. 
+        for(int i = c + 1; i < dim; ++i) // The iteration started from row c + 1, working on the row under the row c.
         {
-            double factor = src->data[i][c] / src->data[c][c];
-            for(int j = c; j < dim; ++j)
+            double factor = mat.data[i][c] / mat.data[c][c]; // المعامل اللي هنضرب فيه عشان نطرح الصف من الصف اللي تحته ويدي 0
+                                                               
+            // (j represents columns.)
+            for(int j = c; j < dim; ++j) // doing the substraction, starting from col c.
             {
-                src->data[i][j] -= factor * src->data[c][j];
+                mat.data[i][j] -= factor * mat.data[c][j];
             }
         }
     }
 
     for(int i = 0; i < dim; ++i)
-        det *= src->data[i][i];
+        det *= mat.data[i][i];
 
-    return det;
+    return det * pow(-1, s); // multipling by -1^s as each row swap multiplies the determinant by -1.
+
+    /* Note
+        In this function i passed the matrix by value instead of passing by reference like other functions because we don't want to modify the matrix itself. 
+    */
 }
 
 /*
@@ -443,3 +452,5 @@ int solveLinearSystem(Matrix *A, Matrix *B, Matrix *X) {
     multiplyMatrix(&invA, B, X);
     return 1; 
 }
+
+// Mohamed Ali is the only one responsible for the bad comments :D.
